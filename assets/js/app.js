@@ -20,8 +20,7 @@ const state = {
 
 function initialLang() {
   const q = new URLSearchParams(location.search).get("lang");
-  if (q === "zh" || q === "en") return q;
-  return (navigator.language || "").toLowerCase().startsWith("zh") ? "zh" : "en";
+  return q === "en" ? "en" : "zh"; // 默认中文，?lang=en 切换英文
 }
 const t = (key) => T.STRINGS[state.lang][key] ?? key;
 
@@ -43,7 +42,7 @@ function setLang(lang) {
   if (lang === state.lang) return;
   state.lang = lang;
   const url = new URL(location.href);
-  url.searchParams.set("lang", lang);
+  if (lang === "en") url.searchParams.set("lang", "en"); else url.searchParams.delete("lang");
   history.replaceState(null, "", url);
   applyLang();
 }
