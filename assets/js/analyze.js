@@ -1,5 +1,4 @@
-// Light reading: measure a photo's real pixels and bucket the results,
-// then score every film profile against that reading.
+// 测光：在照片的真实像素上测量色温（估算）、明暗、反差和饱和度，并分档。
 
 const SAMPLE_EDGE = 120; // downsample before measuring — fast and noise-tolerant
 
@@ -43,36 +42,4 @@ export function measure(img) {
     night: meanLum < 55,
     greenery: green / n > 0.22,
   };
-}
-
-// Weighted match: white balance and brightness matter most, saturation least.
-export function score(film, r) {
-  let s = 50;
-  if (film.night && r.night) s += 28;
-  else if (film.night && !r.night) s -= 22;
-  else if (!film.night && r.night) s -= 12;
-  s += film.bright.includes(r.bright) ? 12 : -6;
-  s += film.contrast.includes(r.contrast) ? 11 : -5;
-  s += film.warm.includes(r.warm) ? 13 : -6;
-  s += film.sat.includes(r.sat) ? 8 : -3;
-  if ((film.tone === "warm" && r.warm === "warm") || (film.tone === "cool" && r.warm === "cool")) s += 4;
-  return s;
-}
-
-// Map the raw score onto a friendly 60–97 "match" figure.
-export const displayScore = (s) => Math.max(60, Math.min(97, Math.round(58 + (s - 50) * 0.7)));
-
-export function autoScene(r) {
-  if (r.night) return "night";
-  if (r.greenery) return "landscape";
-  if (r.warm === "warm") return "portrait";
-  return "daily";
-}
-
-export function rank(films, reading, enabledCats, count = 4) {
-  return films
-    .filter((f) => enabledCats.has(f.cat))
-    .map((f) => ({ film: f, raw: score(f, reading) }))
-    .sort((a, b) => b.raw - a.raw)
-    .slice(0, count);
 }

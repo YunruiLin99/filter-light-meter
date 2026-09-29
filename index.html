@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Film Light Meter · 读懂光线，匹配胶片</title>
-<meta name="description" content="在浏览器里读取照片的色温、明暗与对比，从 42 款真实胶片 LUT 中推荐最契合的质感并实时预览。Read the light in a photo and match it to real film LUTs." />
+<title>Film Light Meter · 富士直出配方助手</title>
+<meta name="description" content="拍之前先测光：判断眼前的光线，推荐合适的富士胶片模拟，并检查抄来的直出配方会不会在这种光线下翻车。全部在浏览器本地完成。" />
 <meta name="author" content="Yunrui Lin" />
 <meta name="theme-color" content="#14110d" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="zh_CN" />
-<meta property="og:title" content="Film Light Meter · 读懂你的光，选对你的片" />
-<meta property="og:description" content="上传一张照片，读取光线，从 42 款真实胶片 LUT 中推荐最契合的质感，全部在浏览器本地完成。" />
+<meta property="og:title" content="Film Light Meter · 拍之前先测光，配方不再翻车" />
+<meta property="og:description" content="判断现场光线，推荐富士胶片模拟，并体检直出配方里会翻车的参数。" />
 <meta property="og:url" content="https://yunruilin99.github.io/filter-light-meter/" />
 <meta property="og:image" content="https://yunruilin99.github.io/filter-light-meter/docs/og.png" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -31,6 +31,7 @@
     </a>
     <nav class="nav-links" aria-label="Sections">
       <a href="#try" data-i18n="nav.try">试用</a>
+      <a href="#why" data-i18n="nav.why">为什么翻车</a>
       <a href="#how" data-i18n="nav.how">原理</a>
       <a href="#about" data-i18n="nav.about">关于</a>
     </nav>
@@ -50,155 +51,179 @@
   <!-- Hero -->
   <section class="hero wrap">
     <div class="hero-text">
-    <div class="eyebrow" data-i18n="hero.eyebrow">作品集项目 · 浏览器端胶片匹配工具</div>
-    <h1><span data-i18n="hero.title1">读懂你的光，</span><span class="dim" data-i18n="hero.title2">选对你的片。</span></h1>
-    <p class="lede" data-i18n="hero.lede">上传一张照片，它会在浏览器里测量色温、明暗与对比，从 42 款真实胶片 LUT 中推荐最契合的几款，并用逐像素渲染即时预览。把「一个个滤镜翻着试」变成「按光匹配」。</p>
-    <div class="cta">
-      <a class="btn btn-primary" href="#try" data-i18n="hero.cta">立即试用</a>
-      <a class="btn btn-ghost" href="https://github.com/YunruiLin99/filter-light-meter" data-i18n="hero.code">查看源码</a>
+      <div class="eyebrow" data-i18n="hero.eyebrow">作品集项目 · 富士直出配方助手</div>
+      <h1><span data-i18n="hero.title1">拍之前先测光，</span><span class="dim" data-i18n="hero.title2">配方不再翻车。</span></h1>
+      <p class="lede" data-i18n="hero.lede">抄来的富士配方，换个光线就偏黄、发蓝、死白？拍一张现场照片，它会判断眼前的光线，推荐合适的胶片模拟，并逐项检查配方里哪些参数会在这种光线下翻车，告诉你怎么改。</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#try" data-i18n="hero.cta">立即试用</a>
+        <a class="btn btn-ghost" href="https://github.com/YunruiLin99/filter-light-meter" data-i18n="hero.code">查看源码</a>
+      </div>
+      <dl class="stats">
+        <div><dt class="mono">7</dt><dd data-i18n="hero.stat1">款富士胶片模拟可预览</dd></div>
+        <div><dt class="mono">5</dt><dd data-i18n="hero.stat2">类配方翻车检查</dd></div>
+        <div><dt class="mono">100%</dt><dd data-i18n="hero.stat3">本地运行，照片不上传</dd></div>
+      </dl>
     </div>
-    <dl class="stats">
-      <div><dt class="mono">42</dt><dd data-i18n="hero.stat1">款真实胶片 LUT</dd></div>
-      <div><dt class="mono">100%</dt><dd data-i18n="hero.stat2">本地运行，照片不上传</dd></div>
-      <div><dt class="mono">0</dt><dd data-i18n="hero.stat3">依赖 · 原生 JavaScript</dd></div>
-    </dl>
-    </div>
-
     <figure class="strip" id="strip">
       <div class="frames">
-        <div class="frame"><figcaption class="mono" data-film-label="portra400"></figcaption></div>
-        <div class="frame"><figcaption class="mono" data-film-label="kodak2383"></figcaption></div>
-        <div class="frame"><figcaption class="mono" data-film-label="polaroid669"></figcaption></div>
-        <div class="frame"><figcaption class="mono" data-film-label="trix400"></figcaption></div>
+        <div class="frame"><figcaption class="mono">PROVIA</figcaption></div>
+        <div class="frame"><figcaption class="mono">Classic Chrome</figcaption></div>
+        <div class="frame"><figcaption class="mono">PRO Neg. Hi</figcaption></div>
+        <div class="frame"><figcaption class="mono">Velvia</figcaption></div>
       </div>
-      <p class="strip-note mono" data-i18n="hero.strip">同一张照片 · 四种胶片 · 实时渲染</p>
+      <p class="strip-note mono" data-i18n="hero.strip">同一张照片 · 四种胶片模拟 · 实时渲染</p>
     </figure>
   </section>
 
-  <!-- 01 Try it -->
+  <!-- 01 Try -->
   <section id="try" class="section wrap">
     <div class="sec-label"><span class="ix">01</span><span data-i18n="try.label">试一试</span></div>
-    <h2 data-i18n="try.title">上传照片，或选一张示例</h2>
+    <h2 data-i18n="try.title">三步：测光 → 选模拟 → 体检配方</h2>
 
-    <div class="stage">
-      <div id="drop" class="drop" tabindex="0" role="button" data-i18n-aria="drop.title" aria-label="上传一张照片">
-        <div class="aperture" aria-hidden="true"></div>
-        <div class="drop-title" data-i18n="drop.title">上传一张照片</div>
-        <div class="drop-hint mono" data-i18n="drop.hint">点击选择 · 或拖到这里 · JPG / PNG</div>
-      </div>
-
-      <div id="loaded" class="loaded hidden">
-        <div class="thumb"><img id="preview" alt="" /></div>
-        <div class="loaded-side">
-          <div class="loaded-head">
-            <h3 data-i18n="loaded.title">照片已就位</h3>
+    <!-- Step 1 -->
+    <div class="step-block">
+      <h3 class="step-title"><span class="step-no mono">1</span><span data-i18n="s1.title">现在是什么光线？</span></h3>
+      <p class="step-desc" data-i18n="s1.desc">拍一张现场照片（或上传、选示例），自动判断光线类型；判断不准可以直接点选。</p>
+      <div class="stage">
+        <label id="drop" class="drop" tabindex="0">
+          <input id="file" type="file" accept="image/*" capture="environment" class="visually-hidden" />
+          <div class="aperture" aria-hidden="true"></div>
+          <div class="drop-title" data-i18n="drop.title">拍一张现场照片</div>
+          <div class="drop-hint mono" data-i18n="drop.hint">手机上会直接打开相机 · 电脑上可以拖入图片</div>
+        </label>
+        <div id="loaded" class="loaded hidden">
+          <div class="thumb"><img id="preview" alt="" /></div>
+          <div class="loaded-side">
+            <div class="readout">
+              <div class="cell"><div class="k mono" data-i18n="reading.k">色温（估算）</div><div class="v" id="r-k">—</div></div>
+              <div class="cell"><div class="k mono" data-i18n="reading.bright">明暗</div><div class="v" id="r-bright">—</div></div>
+              <div class="cell"><div class="k mono" data-i18n="reading.contrast">反差</div><div class="v" id="r-contrast">—</div></div>
+            </div>
             <button id="reset" type="button" class="btn btn-ghost btn-sm" data-i18n="btn.reset">换一张</button>
           </div>
-          <p data-i18n="loaded.desc">光线已读取，推荐见下方。调整胶片类别或场景，结果会实时刷新。</p>
-          <div class="filter">
-            <span class="filter-label mono" data-i18n="filter.cats">胶片类别 · 点击排除</span>
-            <div class="chips" id="catchips"></div>
-          </div>
-          <div class="filter">
-            <span class="filter-label mono" data-i18n="filter.scene">场景 · 影响推荐理由的角度</span>
-            <div class="chips" id="scenechips"></div>
+        </div>
+        <div class="samples">
+          <span class="samples-label" data-i18n="samples.label">或者用示例照片：</span>
+          <div class="sample-row">
+            <button type="button" class="sample" data-sample="coffee"><img src="assets/samples/coffee.jpg" alt="" loading="lazy" /><span data-i18n="sample.coffee">室内暖光</span></button>
+            <button type="button" class="sample" data-sample="cat"><img src="assets/samples/cat.jpg" alt="" loading="lazy" /><span data-i18n="sample.cat">窗边柔光</span></button>
+            <button type="button" class="sample" data-sample="portrait"><img src="assets/samples/portrait.jpg" alt="" loading="lazy" /><span data-i18n="sample.portrait">人像</span></button>
+            <button type="button" class="sample" data-sample="launch"><img src="assets/samples/launch.jpg" alt="" loading="lazy" /><span data-i18n="sample.launch">黄昏户外</span></button>
           </div>
         </div>
-      </div>
-      <input id="file" type="file" accept="image/*" class="hidden" />
-
-      <div class="samples">
-        <span class="samples-label" data-i18n="samples.label">没有照片？试试示例：</span>
-        <div class="sample-row">
-          <button type="button" class="sample" data-sample="coffee"><img src="assets/samples/coffee.jpg" alt="" loading="lazy" /><span data-i18n="sample.coffee">室内暖光</span></button>
-          <button type="button" class="sample" data-sample="cat"><img src="assets/samples/cat.jpg" alt="" loading="lazy" /><span data-i18n="sample.cat">窗边柔光</span></button>
-          <button type="button" class="sample" data-sample="portrait"><img src="assets/samples/portrait.jpg" alt="" loading="lazy" /><span data-i18n="sample.portrait">人像</span></button>
-          <button type="button" class="sample" data-sample="launch"><img src="assets/samples/launch.jpg" alt="" loading="lazy" /><span data-i18n="sample.launch">黄昏户外</span></button>
+        <div class="light-pick">
+          <span class="filter-label mono" data-i18n="light.label">光线类型</span>
+          <div id="light-chips" class="chips" role="group"></div>
+          <p class="light-note" data-i18n="light.note">手机拍照会自动校正白平衡，色温只能作参考，所以光线类型请以你的实际感受为准。</p>
         </div>
       </div>
+      <div id="error" class="err hidden" role="alert"></div>
     </div>
 
-    <div id="error" class="err hidden" role="alert"></div>
+    <!-- Step 2 -->
+    <div id="step2" class="step-block hidden">
+      <h3 class="step-title"><span class="step-no mono">2</span><span data-i18n="s2.title">推荐的胶片模拟</span></h3>
+      <p class="step-desc"><span data-i18n="s2.desc">按光线类型和测光结果打分，用开源 LUT 实时预览。</span> <span id="s2-sample" class="muted-note hidden" data-i18n="s2.sample">还没有上传照片，先用示例照片预览。</span></p>
+      <div id="cards" class="cards cards-3"></div>
+      <p id="extra" class="extra hidden"></p>
+    </div>
 
-    <div id="results" class="results hidden" aria-live="polite">
-      <h3 class="sub-label mono" data-i18n="res.reading">光线读数</h3>
-      <div class="reading">
-        <p id="r-summary" class="reading-summary"></p>
-        <div class="gauge"><div id="needle" class="needle"></div></div>
-        <div class="gauge-label mono"><span data-i18n="gauge.warm">暖 · 2800K</span><span data-i18n="gauge.label">色温</span><span data-i18n="gauge.cool">8000K · 冷</span></div>
-        <div class="readout">
-          <div class="cell"><div class="k mono" data-i18n="cell.scene">场景</div><div class="v" id="r-scene">—</div></div>
-          <div class="cell"><div class="k mono" data-i18n="cell.light">光线</div><div class="v" id="r-light">—</div></div>
-          <div class="cell"><div class="k mono" data-i18n="cell.bright">明度</div><div class="v" id="r-bright">—</div></div>
-          <div class="cell"><div class="k mono" data-i18n="cell.contrast">对比</div><div class="v" id="r-contrast">—</div></div>
+    <!-- Step 3 -->
+    <div id="step3" class="step-block hidden">
+      <h3 class="step-title"><span class="step-no mono">3</span><span data-i18n="s3.title">体检你的配方</span></h3>
+      <p class="step-desc" data-i18n="s3.desc">把小红书或配方网站上抄来的参数填进来，看看在现在的光线下会不会翻车。</p>
+      <form id="recipe" class="recipe">
+        <label class="field wide"><span data-i18n="f.sim">胶片模拟</span><select id="f-sim"></select></label>
+        <label class="field"><span data-i18n="f.wb">白平衡</span>
+          <select id="f-wb">
+            <option value="auto" data-i18n="wb.auto">AUTO</option>
+            <option value="kelvin" data-i18n="wb.kelvin">固定 K 值</option>
+            <option value="daylight" data-i18n="wb.daylight">日光</option>
+            <option value="shade" data-i18n="wb.shade">阴影</option>
+            <option value="incandescent" data-i18n="wb.incandescent">白炽灯</option>
+          </select>
+        </label>
+        <label class="field" id="kelvin-field"><span data-i18n="f.kelvin">K 值</span><input id="f-kelvin" type="number" min="2500" max="10000" step="100" value="5200" /></label>
+        <label class="field"><span data-i18n="f.dr">动态范围</span>
+          <select id="f-dr"><option value="auto">AUTO</option><option value="100">DR100</option><option value="200">DR200</option><option value="400">DR400</option></select>
+        </label>
+        <label class="field"><span data-i18n="f.highlight">高光</span><select id="f-hl"></select></label>
+        <label class="field"><span data-i18n="f.shadow">阴影</span><select id="f-sh"></select></label>
+        <label class="field"><span data-i18n="f.iso">ISO</span>
+          <select id="f-iso">
+            <option value="auto3200" data-i18n="iso.auto3200">Auto（上限 3200）</option>
+            <option value="auto6400" data-i18n="iso.auto6400">Auto（上限 6400）</option>
+            <option value="auto12800" data-i18n="iso.auto12800">Auto（上限 12800）</option>
+            <option value="160">ISO 160</option><option value="200">ISO 200</option><option value="320">ISO 320</option><option value="400">ISO 400</option>
+            <option value="640">ISO 640</option><option value="800">ISO 800</option><option value="1600">ISO 1600</option><option value="3200">ISO 3200</option>
+          </select>
+        </label>
+        <div class="recipe-actions">
+          <button type="submit" class="btn btn-primary" data-i18n="btn.check">开始体检</button>
+          <button type="button" id="example" class="btn btn-ghost" data-i18n="btn.example">填入示例配方</button>
         </div>
-        <div class="tags" id="r-tags"></div>
-      </div>
-
-      <h3 class="sub-label mono" data-i18n="res.matches">推荐胶片 · 真实 LUT 渲染</h3>
-      <div id="cards" class="cards"></div>
+      </form>
+      <div id="result" class="result hidden" aria-live="polite"></div>
     </div>
   </section>
 
-  <!-- 02 How it works -->
-  <section id="how" class="section wrap">
-    <div class="sec-label"><span class="ix">02</span><span data-i18n="how.label">工作原理</span></div>
-    <h2 data-i18n="how.title">三步：测光 → 匹配 → 渲染</h2>
-    <p class="section-lede" data-i18n="how.lede">所有计算都在浏览器里完成，没有服务器、没有上传，也不依赖任何框架。</p>
+  <!-- 02 Why -->
+  <section id="why" class="section wrap">
+    <div class="sec-label"><span class="ix">02</span><span data-i18n="why.label">为什么会翻车</span></div>
+    <h2 data-i18n="why.title">配方是在作者的光线下调出来的</h2>
+    <p class="section-lede" data-i18n="why.lede">富士「直出配方」在国内非常流行，但很多人抄来之后发现：照片偏黄、发蓝、高光死白，和原图差很远。我查了配方作者和用户的讨论，原因大多和光线有关。</p>
     <ol class="steps">
-      <li class="step">
-        <span class="step-ix mono">01</span>
-        <h3 data-i18n="how.1.t">测光</h3>
-        <p data-i18n="how.1.d">把照片缩到 120px 后逐像素统计：用红蓝通道比估算色温（2800–8000K），用亮度 P5–P95 百分位差衡量对比，用平均饱和度和绿色像素占比辅助判断场景。</p>
-        <code class="step-code">kelvin ≈ 5500 − (R̄/B̄ − 1) × 4500</code>
-      </li>
-      <li class="step">
-        <span class="step-ix mono">02</span>
-        <h3 data-i18n="how.2.t">匹配</h3>
-        <p data-i18n="how.2.d">42 款胶片各自标注了适合的明暗、对比、色温和饱和区间。加权打分后取前四名；可以按类别排除胶片，或手动指定场景来改变推荐理由。</p>
-        <code class="step-code">score = Σ wᵢ · match(filmᵢ, photoᵢ)</code>
-      </li>
-      <li class="step">
-        <span class="step-ix mono">03</span>
-        <h3 data-i18n="how.3.t">渲染</h3>
-        <p data-i18n="how.3.d">按需加载推荐胶片的 .cube 3D LUT，在 Canvas 上对每个像素做三线性插值，所以看到的就是这款胶片真实的色彩映射，而不是近似滤镜。</p>
-        <code class="step-code">out = trilerp(LUT[9×9×9], r, g, b)</code>
-      </li>
+      <li class="step"><span class="step-ix mono">01</span><h3 data-i18n="why.1.t">白平衡写死了 K 值</h3><p data-i18n="why.1.d">配方里的 K 值只适合作者当时的光线。晴天定的 5500K 拿到室内暖光下，照片就会整体偏黄。</p></li>
+      <li class="step"><span class="step-ix mono">02</span><h3 data-i18n="why.2.t">DR 和 ISO 的隐藏条件</h3><p data-i18n="why.2.d">DR400 需要感光度不低于约 ISO 640，但很多配方帖没写。条件不满足时，预期的高光保护就没了。</p></li>
+      <li class="step"><span class="step-ix mono">03</span><h3 data-i18n="why.3.t">没人告诉你该用哪个</h3><p data-i18n="why.3.d">面对上百个配方，最大的配方网站作者也承认，「什么场景用哪个配方」只能靠经验慢慢试。</p></li>
+    </ol>
+    <p class="sources"><span data-i18n="why.ev">来源</span>：
+      <a href="https://post.smzdm.com/p/aqrml7gk/">什么值得买 · 抄了那么多富士配方，为什么你的照片还是暗、黄、发蓝？</a> ·
+      <a href="https://fujixweekly.com/2021/12/20/how-to-know-which-film-simulation-recipe-to-use/">Fuji X Weekly · How to Know Which Film Simulation Recipe to Use?</a> ·
+      <a href="https://petapixel.com/2025/06/16/free-app-creates-the-perfect-custom-fujifilm-film-simulation-for-you/">PetaPixel · Fuji X Recipe Generator</a>
+    </p>
+    <h3 class="sub-label mono" data-i18n="cmp.title">现有工具缺的是什么</h3>
+    <div class="cmp">
+      <div class="cmp-item"><h4 data-i18n="cmp.h1">配方库</h4><p data-i18n="cmp.d1">上百个配方可以抄，但不知道眼前这个光线该用哪一个。</p></div>
+      <div class="cmp-item"><h4 data-i18n="cmp.h2">配方生成器</h4><p data-i18n="cmp.d2">根据你回答的问卷生成配方，但不会测量你面前真实的光线。</p></div>
+      <div class="cmp-item me"><h4 data-i18n="cmp.h3">这个工具</h4><p data-i18n="cmp.d3">测量现场光线，推荐胶片模拟，并逐项指出配方里会翻车的参数和改法。</p></div>
+    </div>
+  </section>
+
+  <!-- 03 How -->
+  <section id="how" class="section wrap">
+    <div class="sec-label"><span class="ix">03</span><span data-i18n="how.label">原理</span></div>
+    <h2 data-i18n="how.title">测光 → 匹配 → 体检</h2>
+    <p class="section-lede" data-i18n="how.lede">全部在浏览器里完成，照片不上传。</p>
+    <ol class="steps">
+      <li class="step"><span class="step-ix mono">01</span><h3 data-i18n="how.1.t">测光</h3><p data-i18n="how.1.d">把照片缩到 120px 后逐像素统计：用红蓝通道比估算色温，用亮度 P5–P95 衡量反差。由于手机会自动校正白平衡，光线类型采用「自动判断 + 用户确认」。</p><code class="step-code">kelvin ≈ 5500 − (R̄/B̄ − 1) × 4500</code></li>
+      <li class="step"><span class="step-ix mono">02</span><h3 data-i18n="how.2.t">匹配</h3><p data-i18n="how.2.d">每种胶片模拟都标注了适合、可用、不适合的光线类型，再结合测光的饱和度和反差微调分数，用对应的 3D LUT 逐像素预览。</p><code class="step-code">score = fit(light) + tweak(sat, contrast)</code></li>
+      <li class="step"><span class="step-ix mono">03</span><h3 data-i18n="how.3.t">体检</h3><p data-i18n="how.3.d">对照光线类型的参考色温和明暗，检查白平衡偏差、DR 与 ISO 的限制、强光和平光下的影调参数，以及模拟和光线是否搭配，给出分级提醒和具体改法。</p><code class="step-code">|WB − K(light)| ≥ 1500K → ✕</code></li>
     </ol>
   </section>
 
-  <!-- 03 About -->
+  <!-- 04 About -->
   <section id="about" class="section wrap">
-    <div class="sec-label"><span class="ix">03</span><span data-i18n="about.label">关于项目</span></div>
-    <h2 data-i18n="about.title">为什么做这个</h2>
+    <div class="sec-label"><span class="ix">04</span><span data-i18n="about.label">关于项目</span></div>
+    <h2 data-i18n="about.title">从「滤镜推荐」到「配方体检」</h2>
     <div class="about">
       <div class="about-text">
-        <p data-i18n="about.p1">用手机或相机拍照的人，常常面对几十款胶片模拟，只能一个个试。我想把这件事反过来：先读懂照片本身的光，再让工具告诉你哪几款最合适，并解释为什么。</p>
-        <p data-i18n="about.p2">这个项目从问题定义到上线都由我独立完成，开发过程中使用 AI 辅助编码，我负责方向、算法取舍和最终把关。</p>
+        <p data-i18n="about.p1">这个项目最初是一个「按光线推荐 42 款胶片滤镜」的小工具。做完之后我问自己：它解决了谁的真实问题？和美图秀秀这类有庞大滤镜库的 App 相比，它没有明显差异；真正拍胶片的老手，也早就知道什么光线用什么胶卷。</p>
+        <p data-i18n="about.p2">于是我去看真实用户在讨论什么，发现富士直出用户经常遇到「抄配方翻车」，原因多半是光线不同，而现有的配方库和配方生成器都不会测量现场光线。这正好是这个工具的测光能力可以切入的地方，所以我把它重新定位成了拍摄前的配方助手。</p>
+        <p data-i18n="about.p3">开发过程中使用 AI 辅助编码，由我负责方向、需求判断和最终把关。</p>
       </div>
       <div class="about-side">
         <div class="about-block">
           <h3 class="sub-label mono" data-i18n="about.role">我的角色</h3>
-          <ul class="role-list">
-            <li data-i18n="role.1">产品构思与需求定义</li>
-            <li data-i18n="role.2">交互与视觉设计</li>
-            <li data-i18n="role.3">前端开发与算法实现</li>
-            <li data-i18n="role.4">借助 AI 辅助开发并审校</li>
-          </ul>
+          <ul class="role-list"><li data-i18n="role.1">需求验证与重新定位</li><li data-i18n="role.2">交互与视觉设计</li><li data-i18n="role.3">测光、匹配与体检规则的实现</li><li data-i18n="role.4">借助 AI 辅助开发并审校</li></ul>
         </div>
         <div class="about-block">
           <h3 class="sub-label mono" data-i18n="about.stack">技术栈</h3>
-          <div class="stack">
-            <span>JavaScript (ES Modules)</span><span>Canvas 2D</span><span>3D LUT (.cube)</span><span>HTML / CSS</span><span>GitHub Actions</span><span>GitHub Pages</span>
-          </div>
+          <div class="stack"><span>JavaScript (ES Modules)</span><span>Canvas 2D</span><span>3D LUT (.cube)</span><span>HTML / CSS</span><span>GitHub Pages</span></div>
         </div>
         <div class="about-block">
           <h3 class="sub-label mono" data-i18n="about.next">下一步</h3>
-          <ul class="next-list">
-            <li data-i18n="next.1">用 WebGL 渲染全尺寸图片并支持导出</li>
-            <li data-i18n="next.2">通过服务端代理接入大模型，生成个性化推荐文案</li>
-            <li data-i18n="next.3">读取 EXIF（白平衡、ISO）来提升测光精度</li>
-          </ul>
+          <ul class="next-list"><li data-i18n="next.1">找富士用户做实拍验证：同一配方，改参数前后对比</li><li data-i18n="next.2">读取照片 EXIF 里的模拟和白平衡设置，自动体检</li><li data-i18n="next.3">补充 Classic Neg.、Nostalgic Neg. 等模拟的预览</li></ul>
         </div>
       </div>
     </div>
@@ -207,10 +232,9 @@
 
 <footer class="foot">
   <div class="wrap">
-    <p data-i18n="foot.credits">胶片 LUT 源自开源的 G'MIC 胶片模拟合集；示例照片来自 scikit-image（公有领域 / CC0）。色温、明暗与对比均为基于像素的估算值。</p>
+    <p data-i18n="foot.credits">预览使用开源 G'MIC 胶片模拟合集中的 LUT，是近似效果，与机身直出会有差异。示例照片来自 scikit-image（公有领域 / CC0）。富士、FUJIFILM 及各胶片模拟名称是富士胶片的商标，本项目与其无关联。</p>
     <p class="by"><span data-i18n="foot.by">设计与开发：</span><a href="https://github.com/YunruiLin99">Yunrui Lin</a></p>
   </div>
 </footer>
-
 </body>
 </html>

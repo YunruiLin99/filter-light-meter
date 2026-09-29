@@ -1,178 +1,128 @@
-// Bilingual copy (中文 / English). Static strings are bound through
-// data-i18n attributes; dynamic sentences are built by the functions below.
+// 中文 / English 文案。静态文字通过 data-i18n 绑定。
 
 export const STRINGS = {
   zh: {
-    "meta.title": "Film Light Meter · 读懂光线，匹配胶片",
-    "nav.try": "试用", "nav.how": "原理", "nav.about": "关于",
-    "hero.eyebrow": "作品集项目 · 浏览器端胶片匹配工具",
-    "hero.title1": "读懂你的光，", "hero.title2": "选对你的片。",
-    "hero.lede": "上传一张照片，它会在浏览器里测量色温、明暗与对比，从 42 款真实胶片 LUT 中推荐最契合的几款，并用逐像素渲染即时预览。把「一个个滤镜翻着试」变成「按光匹配」。",
+    "meta.title": "Film Light Meter · 富士直出配方助手",
+    "nav.try": "试用", "nav.why": "为什么翻车", "nav.how": "原理", "nav.about": "关于",
+    "hero.eyebrow": "作品集项目 · 富士直出配方助手",
+    "hero.title1": "拍之前先测光，", "hero.title2": "配方不再翻车。",
+    "hero.lede": "抄来的富士配方，换个光线就偏黄、发蓝、死白？拍一张现场照片，它会判断眼前的光线，推荐合适的胶片模拟，并逐项检查配方里哪些参数会在这种光线下翻车，告诉你怎么改。",
     "hero.cta": "立即试用", "hero.code": "查看源码",
-    "hero.stat1": "款真实胶片 LUT", "hero.stat2": "本地运行，照片不上传", "hero.stat3": "依赖 · 原生 JavaScript",
-    "hero.strip": "同一张照片 · 四种胶片 · 实时渲染",
-    "try.label": "试一试", "try.title": "上传照片，或选一张示例",
-    "drop.title": "上传一张照片", "drop.hint": "点击选择 · 或拖到这里 · JPG / PNG",
-    "samples.label": "没有照片？试试示例：",
+    "hero.stat1": "款富士胶片模拟可预览", "hero.stat2": "类配方翻车检查", "hero.stat3": "本地运行，照片不上传",
+    "hero.strip": "同一张照片 · 四种胶片模拟 · 实时渲染",
+
+    "try.label": "试一试", "try.title": "三步：测光 → 选模拟 → 体检配方",
+    "s1.title": "现在是什么光线？",
+    "s1.desc": "拍一张现场照片（或上传、选示例），自动判断光线类型；判断不准可以直接点选。",
+    "drop.title": "拍一张现场照片", "drop.hint": "手机上会直接打开相机 · 电脑上可以拖入图片",
+    "samples.label": "或者用示例照片：",
     "sample.coffee": "室内暖光", "sample.cat": "窗边柔光", "sample.portrait": "人像", "sample.launch": "黄昏户外",
-    "loaded.title": "照片已就位", "loaded.desc": "光线已读取，推荐见下方。调整胶片类别或场景，结果会实时刷新。",
+    "reading.k": "色温（估算）", "reading.bright": "明暗", "reading.contrast": "反差",
+    "light.label": "光线类型", "light.auto": "自动判断",
+    "light.note": "手机拍照会自动校正白平衡，色温只能作参考，所以光线类型请以你的实际感受为准。",
     "btn.reset": "换一张",
-    "filter.cats": "胶片类别 · 点击排除", "filter.scene": "场景 · 影响推荐理由的角度",
-    "cat.color": "彩色胶片", "cat.fujisim": "富士数字", "cat.bw": "黑白", "cat.instant": "一次成像", "cat.cine": "电影正片",
-    "scene.auto": "自动", "scene.portrait": "人像", "scene.landscape": "风景", "scene.night": "夜景", "scene.daily": "日常",
-    "status.reading": "正在读取光线…",
+    "s2.title": "推荐的胶片模拟", "s2.desc": "按光线类型和测光结果打分，用开源 LUT 实时预览。",
+    "s2.sample": "还没有上传照片，先用示例照片预览。",
+    "card.pick": "推荐", "card.approx": "近似预览", "card.hold": "按住看原图",
+    "extra.pre": "如果你的相机有", "extra.post": "，在这种光线下也值得一试（没有可用的 LUT，暂不预览）。",
+    "s3.title": "体检你的配方", "s3.desc": "把小红书或配方网站上抄来的参数填进来，看看在现在的光线下会不会翻车。",
+    "f.sim": "胶片模拟", "f.wb": "白平衡", "f.kelvin": "K 值", "f.dr": "动态范围", "f.highlight": "高光", "f.shadow": "阴影", "f.iso": "ISO",
+    "wb.auto": "AUTO", "wb.kelvin": "固定 K 值", "wb.daylight": "日光", "wb.shade": "阴影", "wb.incandescent": "白炽灯",
+    "iso.auto3200": "Auto（上限 3200）", "iso.auto6400": "Auto（上限 6400）", "iso.auto12800": "Auto（上限 12800）",
+    "btn.check": "开始体检", "btn.example": "填入示例配方",
+    "res.title": "体检结果", "res.high": "项高风险", "res.warn": "项需要注意", "res.clean": "没有发现会翻车的参数 🎉",
+    "lvl.high": "高风险", "lvl.warn": "注意", "lvl.ok": "没问题", "res.fix": "建议：",
+    "res.needLight": "先在第一步选择光线类型。",
     "err.prefix": "读取失败。", "err.notImage": "这看起来不是图片文件，换一张 JPG 或 PNG 试试。",
-    "err.load": "这张图片没能正常加载，换一张试试。", "err.process": "处理时出错了：",
-    "err.lut": "胶片数据加载失败，请检查网络后重试。",
-    "res.reading": "光线读数", "res.matches": "推荐胶片 · 真实 LUT 渲染",
-    "gauge.warm": "暖 · 2800K", "gauge.label": "色温", "gauge.cool": "8000K · 冷",
-    "cell.scene": "场景", "cell.light": "光线", "cell.bright": "明度", "cell.contrast": "对比",
-    "card.rank": "推荐", "card.match": "契合", "card.why": "为什么适合：", "card.hold": "按住看原图",
-    "card.original": "原图",
-    "how.label": "工作原理", "how.title": "三步：测光 → 匹配 → 渲染",
-    "how.lede": "所有计算都在浏览器里完成，没有服务器、没有上传，也不依赖任何框架。",
-    "how.1.t": "测光", "how.1.d": "把照片缩到 120px 后逐像素统计：用红蓝通道比估算色温（2800–8000K），用亮度 P5–P95 百分位差衡量对比，用平均饱和度和绿色像素占比辅助判断场景。",
-    "how.2.t": "匹配", "how.2.d": "42 款胶片各自标注了适合的明暗、对比、色温和饱和区间。加权打分后取前四名；可以按类别排除胶片，或手动指定场景来改变推荐理由。",
-    "how.3.t": "渲染", "how.3.d": "按需加载推荐胶片的 .cube 3D LUT，在 Canvas 上对每个像素做三线性插值，所以看到的就是这款胶片真实的色彩映射，而不是近似滤镜。",
-    "about.label": "关于项目", "about.title": "为什么做这个",
-    "about.p1": "用手机或相机拍照的人，常常面对几十款胶片模拟，只能一个个试。我想把这件事反过来：先读懂照片本身的光，再让工具告诉你哪几款最合适，并解释为什么。",
-    "about.p2": "这个项目从问题定义到上线都由我独立完成，开发过程中使用 AI 辅助编码，我负责方向、算法取舍和最终把关。",
-    "about.role": "我的角色",
-    "role.1": "产品构思与需求定义", "role.2": "交互与视觉设计", "role.3": "前端开发与算法实现", "role.4": "借助 AI 辅助开发并审校",
+    "err.load": "这张图片没能正常加载，换一张试试。", "err.lut": "预览数据加载失败，请检查网络后重试。",
+
+    "why.label": "为什么会翻车", "why.title": "配方是在作者的光线下调出来的",
+    "why.lede": "富士「直出配方」在国内非常流行，但很多人抄来之后发现：照片偏黄、发蓝、高光死白，和原图差很远。我查了配方作者和用户的讨论，原因大多和光线有关。",
+    "why.1.t": "白平衡写死了 K 值", "why.1.d": "配方里的 K 值只适合作者当时的光线。晴天定的 5500K 拿到室内暖光下，照片就会整体偏黄。",
+    "why.2.t": "DR 和 ISO 的隐藏条件", "why.2.d": "DR400 需要感光度不低于约 ISO 640，但很多配方帖没写。条件不满足时，预期的高光保护就没了。",
+    "why.3.t": "没人告诉你该用哪个", "why.3.d": "面对上百个配方，最大的配方网站作者也承认，「什么场景用哪个配方」只能靠经验慢慢试。",
+    "why.ev": "来源",
+    "cmp.title": "现有工具缺的是什么",
+    "cmp.h1": "配方库", "cmp.d1": "上百个配方可以抄，但不知道眼前这个光线该用哪一个。",
+    "cmp.h2": "配方生成器", "cmp.d2": "根据你回答的问卷生成配方，但不会测量你面前真实的光线。",
+    "cmp.h3": "这个工具", "cmp.d3": "测量现场光线，推荐胶片模拟，并逐项指出配方里会翻车的参数和改法。",
+
+    "how.label": "原理", "how.title": "测光 → 匹配 → 体检",
+    "how.lede": "全部在浏览器里完成，照片不上传。",
+    "how.1.t": "测光", "how.1.d": "把照片缩到 120px 后逐像素统计：用红蓝通道比估算色温，用亮度 P5–P95 衡量反差。由于手机会自动校正白平衡，光线类型采用「自动判断 + 用户确认」。",
+    "how.2.t": "匹配", "how.2.d": "每种胶片模拟都标注了适合、可用、不适合的光线类型，再结合测光的饱和度和反差微调分数，用对应的 3D LUT 逐像素预览。",
+    "how.3.t": "体检", "how.3.d": "对照光线类型的参考色温和明暗，检查白平衡偏差、DR 与 ISO 的限制、强光和平光下的影调参数，以及模拟和光线是否搭配，给出分级提醒和具体改法。",
+
+    "about.label": "关于项目", "about.title": "从「滤镜推荐」到「配方体检」",
+    "about.p1": "这个项目最初是一个「按光线推荐 42 款胶片滤镜」的小工具。做完之后我问自己：它解决了谁的真实问题？和美图秀秀这类有庞大滤镜库的 App 相比，它没有明显差异；真正拍胶片的老手，也早就知道什么光线用什么胶卷。",
+    "about.p2": "于是我去看真实用户在讨论什么，发现富士直出用户经常遇到「抄配方翻车」，原因多半是光线不同，而现有的配方库和配方生成器都不会测量现场光线。这正好是这个工具的测光能力可以切入的地方，所以我把它重新定位成了拍摄前的配方助手。",
+    "about.p3": "开发过程中使用 AI 辅助编码，由我负责方向、需求判断和最终把关。",
+    "about.role": "我的角色", "role.1": "需求验证与重新定位", "role.2": "交互与视觉设计", "role.3": "测光、匹配与体检规则的实现", "role.4": "借助 AI 辅助开发并审校",
     "about.stack": "技术栈", "about.next": "下一步",
-    "next.1": "用 WebGL 渲染全尺寸图片并支持导出", "next.2": "通过服务端代理接入大模型，生成个性化推荐文案",
-    "next.3": "读取 EXIF（白平衡、ISO）来提升测光精度",
-    "foot.credits": "胶片 LUT 源自开源的 G'MIC 胶片模拟合集；示例照片来自 scikit-image（公有领域 / CC0）。色温、明暗与对比均为基于像素的估算值。",
+    "next.1": "找富士用户做实拍验证：同一配方，改参数前后对比", "next.2": "读取照片 EXIF 里的模拟和白平衡设置，自动体检", "next.3": "补充 Classic Neg.、Nostalgic Neg. 等模拟的预览",
+    "foot.credits": "预览使用开源 G'MIC 胶片模拟合集中的 LUT，是近似效果，与机身直出会有差异。示例照片来自 scikit-image（公有领域 / CC0）。富士、FUJIFILM 及各胶片模拟名称是富士胶片的商标，本项目与其无关联。",
     "foot.by": "设计与开发：",
   },
   en: {
-    "meta.title": "Film Light Meter · Read the light, match the film",
-    "nav.try": "Try it", "nav.how": "How it works", "nav.about": "About",
-    "hero.eyebrow": "Portfolio project · In-browser film matching",
-    "hero.title1": "Read the light.", "hero.title2": "Pick the film.",
-    "hero.lede": "Drop in a photo and the page measures its colour temperature, brightness and contrast right in your browser, then recommends the best matches from 42 real film LUTs, rendered pixel by pixel. Choosing a film look becomes a match, not trial and error.",
+    "meta.title": "Film Light Meter · A Fujifilm recipe helper",
+    "nav.try": "Try it", "nav.why": "Why recipes fail", "nav.how": "How it works", "nav.about": "About",
+    "hero.eyebrow": "Portfolio project · Fujifilm recipe helper",
+    "hero.title1": "Meter the light first.", "hero.title2": "Stop ruining recipes.",
+    "hero.lede": "Copied a Fujifilm recipe, only to get yellow, blue or blown-out shots in different light? Take a photo of the scene: it reads the light, suggests suitable film simulations, and checks which recipe settings will fail in this light — and how to fix them.",
     "hero.cta": "Try it now", "hero.code": "View source",
-    "hero.stat1": "real film LUTs", "hero.stat2": "runs locally — photos never leave your device", "hero.stat3": "dependencies · vanilla JavaScript",
-    "hero.strip": "One photo · four films · rendered live",
-    "try.label": "Try it", "try.title": "Upload a photo or pick a sample",
-    "drop.title": "Upload a photo", "drop.hint": "Click to choose · or drag it here · JPG / PNG",
-    "samples.label": "No photo handy? Try a sample:",
+    "hero.stat1": "Fujifilm simulations to preview", "hero.stat2": "kinds of recipe checks", "hero.stat3": "local — photos never leave your device",
+    "hero.strip": "One photo · four film simulations · rendered live",
+
+    "try.label": "Try it", "try.title": "Meter → pick a simulation → check the recipe",
+    "s1.title": "What's the light like?",
+    "s1.desc": "Snap the scene (or upload / pick a sample) to detect the light type — or just tap the right one.",
+    "drop.title": "Take a photo of the scene", "drop.hint": "Opens the camera on phones · drag an image on desktop",
+    "samples.label": "Or use a sample:",
     "sample.coffee": "Warm interior", "sample.cat": "Window light", "sample.portrait": "Portrait", "sample.launch": "Dusk outdoors",
-    "loaded.title": "Photo ready", "loaded.desc": "Light measured — matches are below. Change categories or the scene and they update instantly.",
+    "reading.k": "Colour temp (est.)", "reading.bright": "Brightness", "reading.contrast": "Contrast",
+    "light.label": "Light type", "light.auto": "auto",
+    "light.note": "Phones auto-correct white balance, so the colour temperature is only a hint — go with what you actually see.",
     "btn.reset": "Change photo",
-    "filter.cats": "Film categories · tap to exclude", "filter.scene": "Scene · shapes the reasoning",
-    "cat.color": "Colour film", "cat.fujisim": "Fujifilm sims", "cat.bw": "B&W", "cat.instant": "Instant", "cat.cine": "Cinema print",
-    "scene.auto": "Auto", "scene.portrait": "Portrait", "scene.landscape": "Landscape", "scene.night": "Night", "scene.daily": "Everyday",
-    "status.reading": "Reading the light…",
+    "s2.title": "Suggested film simulations", "s2.desc": "Scored against the light type and reading, previewed live with open-source LUTs.",
+    "s2.sample": "No photo yet — previewing on a sample image.",
+    "card.pick": "Pick", "card.approx": "approx. preview", "card.hold": "Hold for original",
+    "extra.pre": "If your camera has ", "extra.post": ", it's worth a try in this light too (no LUT available, so no preview).",
+    "s3.title": "Check your recipe", "s3.desc": "Enter a recipe you copied and see whether it will fail in this light.",
+    "f.sim": "Film simulation", "f.wb": "White balance", "f.kelvin": "Kelvin", "f.dr": "Dynamic range", "f.highlight": "Highlight", "f.shadow": "Shadow", "f.iso": "ISO",
+    "wb.auto": "AUTO", "wb.kelvin": "Fixed Kelvin", "wb.daylight": "Daylight", "wb.shade": "Shade", "wb.incandescent": "Incandescent",
+    "iso.auto3200": "Auto (max 3200)", "iso.auto6400": "Auto (max 6400)", "iso.auto12800": "Auto (max 12800)",
+    "btn.check": "Check recipe", "btn.example": "Fill an example",
+    "res.title": "Results", "res.high": "high-risk", "res.warn": "to watch", "res.clean": "Nothing here should fail 🎉",
+    "lvl.high": "High risk", "lvl.warn": "Watch", "lvl.ok": "OK", "res.fix": "Fix: ",
+    "res.needLight": "Pick a light type in step one first.",
     "err.prefix": "Couldn't read that.", "err.notImage": "That doesn't look like an image — try a JPG or PNG.",
-    "err.load": "The image failed to load — try another one.", "err.process": "Something went wrong: ",
-    "err.lut": "Film data failed to load. Check your connection and try again.",
-    "res.reading": "Light reading", "res.matches": "Best matches · real LUT renders",
-    "gauge.warm": "Warm · 2800K", "gauge.label": "Colour temp", "gauge.cool": "8000K · Cool",
-    "cell.scene": "Scene", "cell.light": "Light", "cell.bright": "Brightness", "cell.contrast": "Contrast",
-    "card.rank": "Pick", "card.match": "Match", "card.why": "Why it fits: ", "card.hold": "Hold for original",
-    "card.original": "Original",
-    "how.label": "How it works", "how.title": "Measure → Match → Render",
-    "how.lede": "Everything runs in the browser: no server, no uploads, no framework.",
-    "how.1.t": "Measure", "how.1.d": "The photo is downsampled to 120px and read pixel by pixel: the red/blue balance estimates colour temperature (2800–8000K), the P5–P95 luminance spread measures contrast, and mean saturation plus the share of green pixels hint at the scene.",
-    "how.2.t": "Match", "how.2.d": "Each of the 42 films is tagged with the brightness, contrast, white-balance and saturation ranges it suits. A weighted score picks the top four; you can exclude categories or override the scene to change the reasoning.",
-    "how.3.t": "Render", "how.3.d": "The recommended films' .cube 3D LUTs are loaded on demand and applied to every pixel on a canvas with trilinear interpolation, so what you see is the film's actual colour mapping, not an approximate filter.",
-    "about.label": "About", "about.title": "Why I built this",
-    "about.p1": "Anyone shooting with a phone or camera faces dozens of film simulations and ends up clicking through them one by one. I wanted to flip that: read the light in the photo first, then have the tool suggest the few films that suit it and explain why.",
-    "about.p2": "I took this project from problem definition to launch on my own, using AI-assisted coding along the way. I set the direction, made the algorithmic trade-offs and reviewed everything that shipped.",
-    "about.role": "My role",
-    "role.1": "Product concept & requirements", "role.2": "Interaction & visual design", "role.3": "Front-end & algorithm implementation", "role.4": "AI-assisted development & review",
+    "err.load": "The image failed to load — try another one.", "err.lut": "Preview data failed to load. Check your connection.",
+
+    "why.label": "Why recipes fail", "why.title": "A recipe is tuned to its author's light",
+    "why.lede": "Fujifilm 'film simulation recipes' are hugely popular, but many people find their copies come out yellow, blue or clipped. Reading what recipe authors and users discuss, most of the reasons come down to light.",
+    "why.1.t": "Fixed Kelvin white balance", "why.1.d": "A Kelvin value only matches the author's light. 5500K set on a sunny day turns everything yellow under warm indoor bulbs.",
+    "why.2.t": "Hidden DR and ISO rules", "why.2.d": "DR400 needs at least about ISO 640, which many recipe posts never mention — so the expected highlight protection quietly disappears.",
+    "why.3.t": "No one tells you which to use", "why.3.d": "With hundreds of recipes, even the best-known recipe author says choosing one for a situation mostly comes down to experience.",
+    "why.ev": "Sources",
+    "cmp.title": "What existing tools miss",
+    "cmp.h1": "Recipe libraries", "cmp.d1": "Hundreds of recipes to copy, but no help deciding which fits the light in front of you.",
+    "cmp.h2": "Recipe generators", "cmp.d2": "Build a recipe from questionnaire answers, without measuring the actual light.",
+    "cmp.h3": "This tool", "cmp.d3": "Measures the scene, suggests simulations, and flags the exact settings that will fail — with fixes.",
+
+    "how.label": "How it works", "how.title": "Meter → Match → Check",
+    "how.lede": "Everything runs in your browser; photos are never uploaded.",
+    "how.1.t": "Meter", "how.1.d": "The photo is downsampled to 120px: the red/blue balance estimates colour temperature and the P5–P95 luminance spread measures contrast. Because phones auto-correct white balance, the light type is auto-detected and then confirmed by you.",
+    "how.2.t": "Match", "how.2.d": "Each simulation is tagged with the light it suits, tolerates or struggles in; saturation and contrast fine-tune the score, and a 3D LUT previews it pixel by pixel.",
+    "how.3.t": "Check", "how.3.d": "Against the light type's reference temperature and brightness, it checks white-balance drift, DR/ISO limits, tone settings in hard or flat light, and simulation-light fit — with graded warnings and concrete fixes.",
+
+    "about.label": "About", "about.title": "From 'filter picker' to 'recipe check-up'",
+    "about.p1": "This started as a tool that recommended 42 film filters based on the light. Then I asked who it really helps. Next to photo apps with huge filter libraries it had no clear edge, and seasoned film shooters already know which stock suits which light.",
+    "about.p2": "So I looked at what real users discuss, and found Fujifilm shooters constantly hitting 'my copied recipe looks wrong' — mostly because of different light — while recipe libraries and generators never measure the scene. That's exactly where this tool's light metering fits, so I repositioned it as a pre-shoot recipe helper.",
+    "about.p3": "I used AI-assisted coding along the way, while setting the direction, making the product calls and reviewing what shipped.",
+    "about.role": "My role", "role.1": "Need validation & repositioning", "role.2": "Interaction & visual design", "role.3": "Metering, matching & check rules", "role.4": "AI-assisted development & review",
     "about.stack": "Stack", "about.next": "Next steps",
-    "next.1": "WebGL rendering at full resolution, with export", "next.2": "LLM-written recommendations through a server-side proxy",
-    "next.3": "Read EXIF data (white balance, ISO) to sharpen the reading",
-    "foot.credits": "Film LUTs from the open-source G'MIC film emulation collection. Sample photos from scikit-image (public domain / CC0). Colour temperature, brightness and contrast are pixel-based estimates.",
+    "next.1": "Field-test with Fujifilm shooters: same recipe, before vs after the fixes", "next.2": "Read the simulation and WB from photo EXIF to check automatically", "next.3": "Add previews for Classic Neg., Nostalgic Neg. and more",
+    "foot.credits": "Previews use LUTs from the open-source G'MIC film emulation collection and are approximations of in-camera JPEGs. Sample photos from scikit-image (public domain / CC0). FUJIFILM and film simulation names are trademarks of FUJIFILM; this project is not affiliated with it.",
     "foot.by": "Designed & built by ",
   },
 };
-
-const pick = (lang, zh, en) => (lang === "zh" ? zh : en);
-
-export function lightingLabel(r, lang) {
-  if (r.night) return pick(lang, "夜景 / 弱光", "Night / low light");
-  if (r.bright === "bright" && r.contrast === "high") return pick(lang, "明亮硬光", "Bright, hard light");
-  if (r.bright === "bright" && r.contrast === "low") return pick(lang, "明亮柔光", "Bright, soft light");
-  if (r.warm === "warm" && r.bright !== "dark") return pick(lang, "暖光 / 黄金时刻", "Warm / golden hour");
-  if (r.warm === "cool" && r.contrast === "low") return pick(lang, "阴天散射光", "Overcast, diffuse");
-  return pick(lang, "自然光", "Natural light");
-}
-
-export function brightLabel(r, lang) {
-  return { bright: pick(lang, "偏亮", "Bright"), dark: pick(lang, "偏暗", "Dark"), mid: pick(lang, "适中", "Medium") }[r.bright];
-}
-export function contrastLabel(r, lang) {
-  return { high: pick(lang, "高", "High"), low: pick(lang, "低", "Low"), mid: pick(lang, "中", "Medium") }[r.contrast];
-}
-
-export function moodTags(r, lang) {
-  const m = {
-    warm: { warm: ["暖调", "warm"], cool: ["清冷", "cool"], neutral: ["中性", "neutral"] },
-    contrast: { high: ["硬朗", "punchy"], low: ["柔和", "soft"], mid: ["均衡", "balanced"] },
-    sat: { high: ["浓郁", "rich"], low: ["素净", "muted"], mid: ["自然", "natural"] },
-  };
-  const i = lang === "zh" ? 0 : 1;
-  const light = r.night ? ["夜色", "nocturnal"] : r.bright === "bright" ? ["明亮", "airy"] : r.bright === "dark" ? ["低调", "low-key"] : ["通透", "clear"];
-  return [m.warm[r.warm][i], m.contrast[r.contrast][i], m.sat[r.sat][i], light[i]];
-}
-
-export function summary(r, lang) {
-  if (lang === "zh") {
-    const p = r.night ? ["这是一张弱光 / 夜景照片"] : [
-      r.warm === "warm" ? "光线偏暖" : r.warm === "cool" ? "光线偏冷" : "色温中性",
-      r.contrast === "high" ? "光比偏硬" : r.contrast === "low" ? "影调柔和" : "对比适中",
-    ];
-    if (!r.night && r.bright !== "mid") p.push(r.bright === "bright" ? "整体偏亮" : "整体偏暗");
-    return `${p.join("、")}，色温约 ${r.kelvin}K。`;
-  }
-  const p = r.night ? ["A low-light / night shot"] : [
-    r.warm === "warm" ? "Warm light" : r.warm === "cool" ? "Cool light" : "Neutral white balance",
-    r.contrast === "high" ? "hard contrast" : r.contrast === "low" ? "soft tonality" : "moderate contrast",
-  ];
-  if (!r.night && r.bright !== "mid") p.push(r.bright === "bright" ? "bright overall" : "dark overall");
-  return `${p.join(", ")} — about ${r.kelvin}K.`;
-}
-
-export function sceneName(key, lang) {
-  return STRINGS[lang]["scene." + key];
-}
-
-// "Why it fits" = scene framing + a tone-specific reason + the film's own strength.
-export function whyText(film, r, sceneKey, manual, lang) {
-  const t = film.tone, punchy = film.sat.includes("high");
-  const zh = lang === "zh";
-  const lead = zh
-    ? `${manual ? "这是" : "这张看着像"}${{ portrait: "人像", landscape: "风景", night: "夜景 / 弱光", daily: "日常场景" }[sceneKey]}，${{ portrait: "肤色和氛围最关键", landscape: "色彩层次和通透感最关键", night: "氛围和噪点控制最关键", daily: "耐看不出错最重要" }[sceneKey]}，`
-    : `${manual ? "For" : "This reads as"} ${{ portrait: "a portrait", landscape: "a landscape", night: "a night / low-light shot", daily: "an everyday scene" }[sceneKey]}, where ${{ portrait: "skin and mood matter most", landscape: "colour depth and clarity matter most", night: "atmosphere and noise matter most", daily: "a dependable, easy look matters most" }[sceneKey]}; `;
-
-  let fit;
-  if (t === "bw") {
-    fit = {
-      portrait: ["黑白更重情绪与轮廓、弱化肤色瑕疵", "black-and-white puts emotion and shape first and forgives skin"],
-      landscape: ["黑白靠光影层次撑起画面，张力很强", "monochrome lets light and shadow carry the frame"],
-      night: ["黑白夜景里颗粒反而成了味道", "in a night scene the grain becomes part of the charm"],
-      daily: ["黑白让平凡场景多几分故事感", "monochrome gives an ordinary moment a sense of story"],
-    }[sceneKey];
-  } else if (sceneKey === "portrait") {
-    fit = t === "warm" ? ["它的暖调能把肤色拍得红润柔和", "its warmth renders skin rosy and soft"]
-      : t === "cool" ? ["它走冷白路线，肤色干净通透", "its cool palette keeps skin clean and clear"]
-      : ["它肤色还原自然、不过度讨好", "it renders skin naturally without over-flattering"];
-  } else if (sceneKey === "landscape") {
-    fit = punchy ? ["它能把天空与绿植压得浓郁通透", "it makes skies and foliage rich and vivid"]
-      : t === "warm" ? ["它给画面添一层暖意，黄昏氛围更足", "it adds a warm layer that deepens golden-hour mood"]
-      : t === "cool" ? ["它把蓝天与绿意压得清爽通透", "it keeps blues and greens crisp and fresh"]
-      : ["它色彩还原扎实、层次不抢戏", "its colour is faithful and the tones stay composed"];
-  } else if (sceneKey === "night") {
-    fit = t === "warm" ? ["它的暖调能稳住灯光氛围", "its warmth holds on to the glow of artificial light"]
-      : t === "cool" ? ["它的冷调强化夜的清冷与霓虹感", "its cool cast heightens the neon chill of the night"]
-      : ["它发色稳，夜景不易偏色", "its colour stays stable, avoiding odd casts at night"];
-  } else {
-    fit = t === "warm" ? ["它暖调耐看，生活气息足", "its warmth feels lived-in and easy to love"]
-      : t === "cool" ? ["它干净清爽，通勤日常都合适", "it is clean and fresh, right for everyday scenes"]
-      : ["它百搭、不挑场景", "it is versatile and suits almost any scene"];
-  }
-  return zh ? `${lead}${fit[0]}；${film.strength.zh}。` : `${lead}${fit[1]} — ${film.strength.en}.`;
-}

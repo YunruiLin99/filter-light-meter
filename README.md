@@ -1,103 +1,78 @@
 <div align="center">
 
-# Film Light Meter · 光线读数
+# Film Light Meter · 富士直出配方助手
 
-**读懂你的光，选对你的片。**
-一个在浏览器里读取照片光线、推荐最契合胶片质感、并用真实 3D LUT 实时预览的小工具。
+**拍之前先测光，配方不再翻车。**
+判断眼前的光线，推荐合适的富士胶片模拟，并检查抄来的直出配方会不会在这种光线下"翻车"。
 
-*Read the light. Pick the film.*
+*Meter the light first. Stop ruining recipes.*
 
 [**▶ 在线体验**](https://yunruilin99.github.io/filter-light-meter/) · [English](#english)
 
-![Film Light Meter 首屏：同一张照片经过四款胶片 LUT 的实时渲染](docs/hero.jpg)
+![Film Light Meter 首屏：同一张照片在四种富士胶片模拟下的实时预览](docs/hero.jpg)
 
 </div>
 
 ## 要解决的问题
 
-手机和相机里有几十款胶片模拟，挑选时往往只能一个个试。这个工具把顺序反过来：**先读懂照片本身的光**，再推荐最合适的几款胶片，并说明理由。
+富士相机的"直出配方"在国内很流行，但很多人照着配方设置后发现：照片偏黄、发蓝、高光死白，和原图差很远。查看配方作者和用户的讨论后，我发现原因大多和**光线**有关：
 
-## 功能
+- **白平衡写死了 K 值**：配方里的 K 值只适合作者拍摄时的光线，换到室内暖光或阴天就会跑偏（[什么值得买](https://post.smzdm.com/p/aqrml7gk/)）
+- **DR 与 ISO 的隐藏条件**：DR400 需要感光度不低于约 ISO 640，很多配方帖没写
+- **不知道该用哪个**：最大的配方网站作者也承认，"什么场景用哪个配方"主要靠经验（[Fuji X Weekly](https://fujixweekly.com/2021/12/20/how-to-know-which-film-simulation-recipe-to-use/)）
 
-- **光线读数**：基于照片的真实像素，估算色温（2800–8000K）、明暗、对比和饱和度
-- **胶片匹配**：覆盖彩色负片、正片、富士数字模拟、黑白、一次成像和电影正片共 42 款，加权打分后推荐前四名，并附推荐理由
-- **真实 LUT 预览**：用每款胶片的 `.cube` 3D LUT 逐像素渲染，按住预览图即可与原图对比
-- **实时调整**：排除某些胶片类别或手动指定场景，推荐结果立即刷新
-- **隐私友好**：所有计算都在浏览器本地完成，照片不会上传
-- **示例照片**：没有合适的照片时，点一下示例就能看到效果
-- **中英双语**：默认中文，可一键切换英文
+现有的配方库只提供配方，配方生成器根据问卷生成配方（[PetaPixel](https://petapixel.com/2025/06/16/free-app-creates-the-perfect-custom-fujifilm-film-simulation-for-you/)），**但都不会测量你面前真实的光线**。
 
-![推荐结果：色温读数与四款胶片在照片上的真实渲染效果](docs/results.jpg)
+## 三步用法
 
-## 实现原理
+1. **测光**：拍一张现场照片（手机上直接调用相机），估算色温、明暗和反差，自动判断光线类型（晴天、阴天、黄金时刻、室内暖光……）。判断不准可以直接点选
+2. **选模拟**：按光线推荐 3 种胶片模拟，用 LUT 实时预览，按住预览图可以对比原图
+3. **体检配方**：填入抄来的配方参数，逐项检查并给出分级提醒和具体改法：
+   - 白平衡 K 值与现场光线的偏差
+   - DR200 / DR400 的最低 ISO 要求
+   - 强光下的高光死白、阴影死黑，阴天下的画面发灰
+   - 暗光下的糊片和噪点风险
+   - 胶片模拟和光线是否搭配
 
-```
-照片 ──► 测光 ──► 匹配 ──► 渲染
-         120px     42 款     .cube 3D LUT
-         采样      胶片档案   三线性插值
-```
+![体检结果：白平衡写死 5200K，在室内暖光下会偏黄](docs/results.jpg)
 
-1. **测光**（`assets/js/analyze.js`）：把照片缩到 120px 后逐像素统计。用红蓝通道比估算色温，用亮度 P5–P95 百分位差衡量对比，再用平均饱和度和绿色像素占比辅助判断场景（人像、风景、夜景或日常）。
-2. **匹配**（`assets/js/analyze.js`、`assets/js/films.js`）：每款胶片都标注了适合的明暗、对比、色温和饱和区间，加权打分后排序。色温和明暗权重最高；夜景专用的高感胶片在日光场景下会被降权。
-3. **渲染**（`assets/js/lut.js`）：只按需加载被推荐胶片的 LUT，并做缓存；在 `<canvas>` 上把每个像素通过 9×9×9 的 LUT 做三线性插值映射。
+## 实现
 
-## 技术栈
-
-原生 JavaScript（ES Modules）· Canvas 2D · 3D LUT（`.cube`）· HTML / CSS · 通过 GitHub Actions 部署到 GitHub Pages。不依赖任何框架，也不需要构建步骤。
+原生 JavaScript（ES Modules），不需要构建步骤，全部在浏览器里运行，照片不上传。
 
 ```
-index.html
-assets/
-  css/style.css
-  js/app.js        界面、状态与渲染
-  js/analyze.js    测光与胶片打分
-  js/lut.js        .cube 解析与三线性插值 LUT 引擎
-  js/films.js      42 款胶片档案（中英）
-  js/i18n.js       界面文案与推荐理由生成（中 / 英）
-  luts/*.cube      胶片 LUT
-  samples/*.jpg    示例照片
+assets/js/analyze.js   测光：色温估算、明暗、反差、饱和度
+assets/js/sims.js      富士胶片模拟目录、光线类型、推荐打分
+assets/js/checks.js    配方体检规则
+assets/js/lut.js       .cube 解析与三线性插值渲染
+assets/js/app.js       界面与交互
+assets/js/i18n.js      中英文案
 ```
 
-本地运行（LUT 通过网络请求加载，需要起一个本地服务）：
+**关于准确性**：手机拍照会自动校正白平衡，所以从照片估算的色温只能作参考。这也是光线类型采用"自动判断 + 用户确认"的原因。预览用的是开源 LUT，属于近似效果，和机身直出会有差异。
 
-```bash
-python3 -m http.server 8000
-# 打开 http://localhost:8000
-```
+## 项目是怎么来的
 
-## 我的角色
+它最初是一个"按光线推荐 42 款胶片滤镜"的工具。做完后我问自己：它解决了谁的真实问题？和修图 App 庞大的滤镜库相比没有明显差异，拍胶片的老手也早就知道什么光用什么卷。于是我去查真实用户在讨论什么，发现了富士用户"抄配方翻车"的问题，并确认现有工具都不测量现场光线，于是把它重新定位成现在的拍摄前配方助手。最初的版本保留在提交历史里。
 
-这个项目由我独立完成：
+**我的角色**：独立完成需求验证与重新定位、交互与视觉设计、测光与体检规则的实现；开发中借助 AI 辅助编码，由我负责方向与审校。
 
-- **产品**：定义问题，确定「按光匹配」的思路和功能范围
-- **设计**：交互流程，以及暗色胶片风格的视觉语言
-- **开发**：前端实现、测光算法、打分模型和 LUT 渲染引擎
-- **AI 辅助开发**：借助 AI 编码工具提升效率，由我把控方向、做算法取舍并审校最终代码
+**下一步**：找富士用户做实拍验证（同一配方修改前后对比）；读取照片 EXIF 里的模拟和白平衡设置，自动体检；补充 Classic Neg.、Nostalgic Neg. 等模拟的预览。
 
-## 下一步
-
-- 用 WebGL 渲染全尺寸图片，并支持导出
-- 通过服务端代理接入大模型，生成个性化推荐文案（API key 不暴露在浏览器中）
-- 读取 EXIF（白平衡、ISO）来提升测光精度
+本地运行：`python3 -m http.server 8000`，然后打开 http://localhost:8000
 
 ## 致谢
 
-- 胶片 LUT 源自开源的 [G'MIC](https://gmic.eu/) 胶片模拟合集
-- 示例照片来自 [scikit-image](https://scikit-image.org/docs/stable/api/skimage.data.html)：*Eileen Collins*（NASA，公有领域）、*Coffee*（Rachel Michetti，CC0）、*Chelsea the cat*（Stefan van der Walt，CC0）、*DSCOVR launch*（SpaceX，公有领域）
+- LUT 来自开源的 [G'MIC](https://gmic.eu/) 胶片模拟合集
+- 示例照片来自 [scikit-image](https://scikit-image.org/docs/stable/api/skimage.data.html)（NASA / SpaceX 公有领域，Rachel Michetti、Stefan van der Walt CC0）
+- FUJIFILM 及各胶片模拟名称是富士胶片的商标，本项目与其无关联
 
 ---
 
 ## English
 
-**[▶ Live demo](https://yunruilin99.github.io/filter-light-meter/?lang=en)** (English UI)
+**Film Light Meter** is a pre-shoot helper for Fujifilm shooters who copy "film simulation recipes". Recipes are tuned to their author's light, so a fixed Kelvin white balance or a DR400 setting without enough ISO often goes wrong in different conditions. Take a photo of the scene: the tool estimates the light, suggests suitable film simulations with live LUT previews, and checks each recipe setting (white balance drift, DR/ISO limits, tone settings in hard or flat light, low-light risks, simulation–light fit) with graded warnings and fixes. It runs entirely in the browser.
 
-Photo apps and cameras offer dozens of film simulations, and choosing one usually means clicking through them all. Film Light Meter reverses that: it reads the light in your photo first, then recommends the few films that suit it and explains why.
+It began as a 42-film filter recommender. After finding it had no clear edge over photo apps' filter libraries, I looked for a real unmet need and repositioned it around recipe failures, which existing recipe libraries and generators don't address because none of them measure the actual light.
 
-- **Light reading:** estimates colour temperature (2800–8000K), brightness, contrast and saturation from the photo's pixels.
-- **Film matching:** scores 42 film stocks and returns the top four with a reason for each.
-- **Real LUT previews:** every pick is rendered through its `.cube` 3D LUT with trilinear interpolation. Press and hold to compare with the original.
-- **Private:** everything runs in the browser, and photos are never uploaded.
-
-**Stack:** vanilla JavaScript (ES modules), Canvas 2D and 3D LUTs, deployed to GitHub Pages via GitHub Actions. No frameworks and no build step.
-
-**My role:** I built it end to end, covering product definition, interaction and visual design, front-end and algorithm implementation. I used AI-assisted coding, and I set the direction and reviewed everything that shipped.
+[Live demo](https://yunruilin99.github.io/filter-light-meter/?lang=en) · Author: Yunrui Lin
