@@ -7,7 +7,7 @@
 
 *Meter the light first. Stop ruining recipes.*
 
-[**▶ 在线体验**](https://yunruilin99.github.io/filter-light-meter/) · [English](#english)
+[**▶ 产品案例 + 在线体验**](https://yunruilin99.github.io/filter-light-meter/) · [English](#english)
 
 ![Film Light Meter 首屏：同一张照片在四种富士胶片模拟下的实时预览](docs/hero.jpg)
 
@@ -85,4 +85,4 @@ assets/js/i18n.js      中英文案
 
 It began as a 42-film filter recommender. After finding it had no clear edge over photo apps' filter libraries, I looked for a real unmet need and repositioned it around recipe failures, which existing recipe libraries and generators don't address because none of them measure the actual light.
 
-[Live demo](https://yunruilin99.github.io/filter-light-meter/?lang=en) · Author: Yunrui Lin
+[Case study & live demo](https://yunruilin99.github.io/filter-light-meter/?lang=en) · Author: Yunrui Lin
