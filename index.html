@@ -60,7 +60,7 @@
       </div>
       <dl class="stats">
         <div><dt class="mono">14</dt><dd data-i18n="hero.stat1">种富士胶片模拟全覆盖</dd></div>
-        <div><dt class="mono">6</dt><dd data-i18n="hero.stat2">类配方翻车检查</dd></div>
+        <div><dt class="mono">9</dt><dd data-i18n="hero.stat2">类配方翻车检查</dd></div>
         <div><dt class="mono">100%</dt><dd data-i18n="hero.stat3">本地运行，照片不上传</dd></div>
       </dl>
     </div>
@@ -131,7 +131,16 @@
     <!-- Step 3 -->
     <div id="step3" class="step-block hidden">
       <h3 class="step-title"><span class="step-no mono">3</span><span data-i18n="s3.title">体检你的配方</span></h3>
-      <p class="step-desc" data-i18n="s3.desc">把小红书或配方网站上抄来的参数填进来，看看在现在的光线下会不会翻车。</p>
+      <p class="step-desc" data-i18n="s3.desc">直接粘贴从小红书或配方网站复制的配方文字，或者手动填写，看看在现在的光线下会不会翻车。</p>
+      <div class="paste">
+        <label for="paste-text" class="paste-label" data-i18n="paste.label">粘贴配方文字（从小红书、配方网站复制）</label>
+        <textarea id="paste-text" rows="5" data-i18n-ph="paste.ph"></textarea>
+        <div class="paste-actions">
+          <button type="button" id="paste-go" class="btn btn-primary btn-sm" data-i18n="paste.go">识别并填入</button>
+          <button type="button" id="paste-sample" class="btn btn-ghost btn-sm" data-i18n="paste.sample">试试示例文字</button>
+          <span id="paste-msg" class="paste-msg" role="status"></span>
+        </div>
+      </div>
       <form id="recipe" class="recipe">
         <label class="field wide"><span data-i18n="f.sim">胶片模拟</span><select id="f-sim"></select></label>
         <label class="field"><span data-i18n="f.wb">白平衡</span>
@@ -151,6 +160,13 @@
         </label>
         <label class="field"><span data-i18n="f.highlight">高光</span><select id="f-hl"></select></label>
         <label class="field"><span data-i18n="f.shadow">阴影</span><select id="f-sh"></select></label>
+        <label class="field"><span data-i18n="f.ec">曝光补偿</span><select id="f-ec"></select></label>
+        <label class="field"><span data-i18n="f.color">色彩</span><select id="f-color"></select></label>
+        <label class="field"><span data-i18n="f.cce">色彩效果</span><select id="f-cce" class="lvl-sel"></select></label>
+        <label class="field"><span data-i18n="f.fxblue">彩色 FX 蓝色</span><select id="f-fxblue" class="lvl-sel"></select></label>
+        <label class="field"><span data-i18n="f.grain">颗粒效果</span><select id="f-grain" class="lvl-sel"></select></label>
+        <label class="field"><span data-i18n="f.sharp">锐度</span><select id="f-sharp"></select></label>
+        <label class="field"><span data-i18n="f.nr">高 ISO 降噪</span><select id="f-nr"></select></label>
         <label class="field"><span data-i18n="f.iso">ISO</span>
           <select id="f-iso">
             <option value="auto3200" data-i18n="iso.auto3200">Auto（上限 3200）</option>
@@ -225,7 +241,7 @@
         </div>
         <div class="about-block">
           <h3 class="sub-label mono" data-i18n="about.next">下一步</h3>
-          <ul class="next-list"><li data-i18n="next.1">找富士用户做实拍验证：同一配方，改参数前后对比</li><li data-i18n="next.2">读取照片 EXIF 里的模拟和白平衡设置，自动体检</li><li data-i18n="next.3">用真实机身直出照片校准自制的示意 LUT</li></ul>
+          <ul class="next-list"><li data-i18n="next.1">找富士用户做实拍验证：同一配方，改参数前后对比</li><li data-i18n="next.2">识别配方截图里的文字（OCR），以及读取照片 EXIF 里的设置，自动体检</li><li data-i18n="next.3">用真实机身直出照片校准自制的示意 LUT</li></ul>
         </div>
       </div>
     </div>

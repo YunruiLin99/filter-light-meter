@@ -8,7 +8,7 @@ export const WB_PRESETS = { daylight: 5500, shade: 7500, incandescent: 3000 };
 // X-Trans IV / V 的基础感光度是 ISO 160：DR200 ≥ 320，DR400 ≥ 640；更早的机型基础 ISO 200，对应 400 / 800
 const DR_MIN_ISO = { 200: 320, 400: 640 };
 
-export const DEFAULT_RECIPE = { sim: "classic_chrome", wb: "kelvin", kelvin: 5200, wbR: 2, wbB: -4, dr: "400", highlight: -1, shadow: 1, iso: "auto6400" };
+export const DEFAULT_RECIPE = { sim: "classic_chrome", wb: "kelvin", kelvin: 5200, wbR: 2, wbB: -4, dr: "400", highlight: -1, shadow: 1, iso: "auto6400", ec: 0.3, color: 2, cce: "weak", fxBlue: "weak", grain: "weak", sharpness: -1, nr: -3 };
 
 export function checkRecipe(recipe, lightKey, reading, lang = "zh") {
   const L = (zh, en) => (lang === "zh" ? zh : en);
@@ -114,6 +114,46 @@ export function checkRecipe(recipe, lightKey, reading, lang = "zh") {
     add("warn", L("阴天 + 高光阴影都调低：照片会发灰", "Flat light + lowered highlights and shadows: photos go grey"),
       L("阴天本来反差就低，再降低高光和阴影，画面会发闷发灰。", "Overcast light is already low-contrast; lowering both makes it murky."),
       L("阴影 +1、高光 0，让画面更通透。", "Try shadows +1 and highlights 0 for more snap."));
+  }
+
+  // 4b. 曝光补偿
+  const ec = Number(recipe.ec || 0);
+  const ecTxt = `${ec > 0 ? "+" : ""}${ec}`;
+  if (ec >= 0.7 && hard && recipe.dr !== "400") {
+    add(recipe.dr === "100" && ec >= 1 ? "high" : "warn", L(`强光下曝光补偿 ${ecTxt}，高光容易过曝`, `Exposure ${ecTxt} in hard light will clip highlights`),
+      L("很多配方为了「日系通透」会加曝光，但晴天光比大，天空和亮部很容易变成一片白。", "Many recipes add exposure for an airy look, but in bright sun the sky and highlights turn to white."),
+      L("曝光补偿改为 0 ~ +0.3，或者改用 DR400。", "Use 0 to +0.3, or switch to DR400."));
+  } else if (ec <= -0.7 && dark) {
+    add("warn", L(`暗光下曝光补偿 ${ecTxt}，暗部会很脏`, `Exposure ${ecTxt} in low light makes shadows muddy`),
+      L("本来就暗，再减曝光，暗部细节和噪点都会变差。", "It's already dark; pulling exposure down worsens shadow detail and noise."),
+      L("曝光补偿改为 0。", "Set exposure compensation to 0."));
+  }
+
+  // 4c. 色彩
+  const color = Number(recipe.color || 0);
+  if (color >= 3 && sim.id === "velvia") {
+    add("warn", L(`Velvia + 色彩 +${color}：容易溢色`, `Velvia + Color +${color}: colours will clip`),
+      L("Velvia 本身饱和度就很高，再加色彩，红色和绿色会失去层次。", "Velvia is already saturated; more Color makes reds and greens lose detail."),
+      L("色彩调到 0 ~ +1。", "Set Color to 0 to +1."));
+  } else if (color >= 2 && (lightKey === "golden" || lightKey === "indoor_warm")) {
+    add("warn", L(`暖光下色彩 +${color}，肤色容易发橙`, `Color +${color} in warm light turns skin orange`),
+      L(`${lightName}本来就偏暖，饱和度再提高，肤色和暖色会变得很浓。`, `${lightName} is already warm; more saturation makes skin and warm tones heavy.`),
+      L("拍人像时色彩调到 0 ~ +1。", "For portraits, set Color to 0 to +1."));
+  }
+
+  // 4d. 降噪与颗粒（暗光高 ISO）
+  const nr = Number(recipe.nr || 0);
+  if (dark && nr <= -3) {
+    add("warn", L(`暗光下高 ISO 降噪 ${nr}，噪点会很明显`, `Noise reduction ${nr} at high ISO in the dark shows a lot of noise`),
+      L(`配方把降噪调低，是为了保留细节和「胶片颗粒感」，但暗光下 ISO 会升到几千，噪点会远比作者样片明显${recipe.grain === "strong" ? "，再加上强颗粒效果会更粗糙" : ""}。`,
+        `Recipes lower NR to keep detail and a film-like texture, but in the dark ISO climbs into the thousands and noise shows far more than in the author's samples${recipe.grain === "strong" ? ", and strong grain adds to it" : ""}.`),
+      L("暗光下把降噪调到 -1 或 -2；喜欢颗粒感的话可以保留。", "Set NR to -1 or -2 in low light — or keep it if you like the grit."));
+  }
+
+  // 4e. 彩色 FX 蓝色
+  if (recipe.fxBlue === "strong" && lightKey === "sunny") {
+    add("ok", L("彩色 FX 蓝色：强", "Color Chrome FX Blue: strong"),
+      L("晴天的蓝天会被压得更深更浓，这种光线下效果最明显。", "Clear blue skies get deeper and richer — this is the light where it shows most."));
   }
 
   // 5. 胶片模拟与光线

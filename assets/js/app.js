@@ -2,6 +2,7 @@ import { loadLUT, applyLUT, toCanvas, cropToImageData } from "./lut.js";
 import { measure } from "./analyze.js";
 import { LIGHTS, lightOf, guessLight, SIMS, simOf, rankSims, NEWER_ONLY } from "./sims.js";
 import { checkRecipe, DEFAULT_RECIPE } from "./checks.js";
+import { parseRecipe, EC_OPTIONS } from "./parse.js";
 import { STRINGS } from "./i18n.js";
 
 const $ = (s, root = document) => root.querySelector(s);
@@ -27,6 +28,8 @@ function applyLang() {
   document.documentElement.lang = state.lang === "zh" ? "zh-CN" : "en";
   document.title = t("meta.title");
   document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll("[data-i18n-ph]").forEach((el) => { el.placeholder = t(el.dataset.i18nPh); });
+  fillLevelOptions();
   document.querySelectorAll(".lang-toggle [data-lang]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === state.lang)));
   renderLightChips();
   renderReadout();
@@ -253,11 +256,23 @@ function buildForm() {
   $("#f-wbb").innerHTML = SH.map(shift).join("");
   $("#f-wbr").value = "0";
   $("#f-wbb").value = "0";
+  const four = Array.from({ length: 9 }, (_, i) => i - 4);
+  ["#f-color", "#f-sharp", "#f-nr"].forEach((id) => { $(id).innerHTML = four.map(tone).join(""); $(id).value = "0"; });
+  $("#f-ec").innerHTML = EC_OPTIONS.map((v) => `<option value="${v}">${v > 0 ? "+" : ""}${v}</option>`).join("");
+  $("#f-ec").value = "0";
+  fillLevelOptions();
   $("#f-hl").value = "0";
   $("#f-sh").value = "0";
   $("#f-wb").value = "auto";
   $("#f-iso").value = "auto6400";
   syncKelvin();
+}
+function fillLevelOptions() {
+  document.querySelectorAll(".lvl-sel").forEach((sel) => {
+    const v = sel.value || "off";
+    sel.innerHTML = ["off", "weak", "strong"].map((k) => `<option value="${k}">${t(`lv.${k}`)}</option>`).join("");
+    sel.value = v;
+  });
 }
 function syncKelvin() {
   $("#kelvin-field").classList.toggle("hidden", $("#f-wb").value !== "kelvin");
@@ -273,19 +288,36 @@ function readRecipe() {
     iso: $("#f-iso").value,
     wbR: Number($("#f-wbr").value),
     wbB: Number($("#f-wbb").value),
+    ec: Number($("#f-ec").value),
+    color: Number($("#f-color").value),
+    cce: $("#f-cce").value,
+    fxBlue: $("#f-fxblue").value,
+    grain: $("#f-grain").value,
+    sharpness: Number($("#f-sharp").value),
+    nr: Number($("#f-nr").value),
   };
 }
+// 只覆盖 r 里有的字段（粘贴识别时，没识别到的参数保持原样）
 function fillRecipe(r) {
-  $("#f-sim").value = r.sim;
-  $("#f-wb").value = r.wb;
-  $("#f-kelvin").value = r.kelvin;
-  $("#f-dr").value = r.dr;
-  $("#f-hl").value = String(r.highlight);
-  $("#f-sh").value = String(r.shadow);
-  $("#f-iso").value = r.iso;
-  $("#f-wbr").value = String(r.wbR ?? 0);
-  $("#f-wbb").value = String(r.wbB ?? 0);
+  const set = (id, v) => { if (v !== undefined && v !== null) $(id).value = String(v); };
+  set("#f-sim", r.sim); set("#f-wb", r.wb); set("#f-kelvin", r.kelvin); set("#f-dr", r.dr);
+  set("#f-hl", r.highlight); set("#f-sh", r.shadow); set("#f-iso", r.iso);
+  set("#f-wbr", r.wbR); set("#f-wbb", r.wbB); set("#f-ec", r.ec); set("#f-color", r.color);
+  set("#f-cce", r.cce); set("#f-fxblue", r.fxBlue); set("#f-grain", r.grain); set("#f-sharp", r.sharpness); set("#f-nr", r.nr);
   syncKelvin();
+}
+const FIELD_NAMES = { sim: "f.sim", wb: "f.wb", dr: "f.dr", highlight: "f.highlight", shadow: "f.shadow", iso: "f.iso", wbR: "f.wbr", wbB: "f.wbb", ec: "f.ec", color: "f.color", cce: "f.cce", fxBlue: "f.fxblue", grain: "f.grain", sharpness: "f.sharp", nr: "f.nr" };
+function pasteRecipe() {
+  const text = $("#paste-text").value.trim();
+  const msg = $("#paste-msg");
+  if (!text) { msg.textContent = t("paste.empty"); msg.className = "paste-msg warn"; return; }
+  const { recipe, missed } = parseRecipe(text);
+  const keys = Object.keys(recipe).filter((k) => FIELD_NAMES[k]);
+  if (!keys.length) { msg.textContent = t("paste.none"); msg.className = "paste-msg warn"; return; }
+  fillRecipe(recipe);
+  msg.className = "paste-msg ok";
+  msg.textContent = `${t("paste.ok").replace("{n}", keys.length)}${missed.length ? ` ${t("paste.missed")}${missed.slice(0, 4).join(L("、", ", "))}` : ""}`;
+  runCheck();
 }
 
 const ICON = { high: "✕", warn: "!", ok: "✓" };
@@ -348,6 +380,8 @@ function init() {
   $("#f-wb").addEventListener("change", syncKelvin);
   $("#recipe").addEventListener("submit", (e) => { e.preventDefault(); runCheck(); });
   $("#example").addEventListener("click", () => { fillRecipe(DEFAULT_RECIPE); runCheck(); });
+  $("#paste-go").addEventListener("click", pasteRecipe);
+  $("#paste-sample").addEventListener("click", () => { $("#paste-text").value = t("paste.sampleText"); pasteRecipe(); });
   applyLang();
   renderHeroStrip();
 }
