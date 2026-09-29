@@ -353,3 +353,4 @@ label.drop { display: flex; }
 .cmp-item p { color: var(--text); font-size: 14px; line-height: 1.6; }
 .cmp-item.me { border-color: var(--amber); background: rgba(232, 163, 61, .06); }
 .cmp-item.me h4 { color: var(--amber); }
+.newer { font-size: 10.5px; letter-spacing: .06em; color: var(--muted-dim); margin-top: 8px; }

@@ -59,8 +59,8 @@
         <a class="btn btn-ghost" href="https://github.com/YunruiLin99/filter-light-meter" data-i18n="hero.code">查看源码</a>
       </div>
       <dl class="stats">
-        <div><dt class="mono">7</dt><dd data-i18n="hero.stat1">款富士胶片模拟可预览</dd></div>
-        <div><dt class="mono">5</dt><dd data-i18n="hero.stat2">类配方翻车检查</dd></div>
+        <div><dt class="mono">14</dt><dd data-i18n="hero.stat1">种富士胶片模拟全覆盖</dd></div>
+        <div><dt class="mono">6</dt><dd data-i18n="hero.stat2">类配方翻车检查</dd></div>
         <div><dt class="mono">100%</dt><dd data-i18n="hero.stat3">本地运行，照片不上传</dd></div>
       </dl>
     </div>
@@ -144,6 +144,8 @@
           </select>
         </label>
         <label class="field" id="kelvin-field"><span data-i18n="f.kelvin">K 值</span><input id="f-kelvin" type="number" min="2500" max="10000" step="100" value="5200" /></label>
+        <label class="field"><span data-i18n="f.wbr">白平衡偏移 R</span><select id="f-wbr"></select></label>
+        <label class="field"><span data-i18n="f.wbb">白平衡偏移 B</span><select id="f-wbb"></select></label>
         <label class="field"><span data-i18n="f.dr">动态范围</span>
           <select id="f-dr"><option value="auto">AUTO</option><option value="100">DR100</option><option value="200">DR200</option><option value="400">DR400</option></select>
         </label>
@@ -197,7 +199,7 @@
     <p class="section-lede" data-i18n="how.lede">全部在浏览器里完成，照片不上传。</p>
     <ol class="steps">
       <li class="step"><span class="step-ix mono">01</span><h3 data-i18n="how.1.t">测光</h3><p data-i18n="how.1.d">把照片缩到 120px 后逐像素统计：用红蓝通道比估算色温，用亮度 P5–P95 衡量反差。由于手机会自动校正白平衡，光线类型采用「自动判断 + 用户确认」。</p><code class="step-code">kelvin ≈ 5500 − (R̄/B̄ − 1) × 4500</code></li>
-      <li class="step"><span class="step-ix mono">02</span><h3 data-i18n="how.2.t">匹配</h3><p data-i18n="how.2.d">每种胶片模拟都标注了适合、可用、不适合的光线类型，再结合测光的饱和度和反差微调分数，用对应的 3D LUT 逐像素预览。</p><code class="step-code">score = fit(light) + tweak(sat, contrast)</code></li>
+      <li class="step"><span class="step-ix mono">02</span><h3 data-i18n="how.2.t">匹配</h3><p data-i18n="how.2.d">14 种胶片模拟都标注了适合、可用、不适合的光线类型，以及每种光线下最有代表性的选择，再结合测光的饱和度和反差微调分数，用 3D LUT 逐像素预览。</p><code class="step-code">score = fit(light) + tweak(sat, contrast)</code></li>
       <li class="step"><span class="step-ix mono">03</span><h3 data-i18n="how.3.t">体检</h3><p data-i18n="how.3.d">对照光线类型的参考色温和明暗，检查白平衡偏差、DR 与 ISO 的限制、强光和平光下的影调参数，以及模拟和光线是否搭配，给出分级提醒和具体改法。</p><code class="step-code">|WB − K(light)| ≥ 1500K → ✕</code></li>
     </ol>
   </section>
@@ -223,7 +225,7 @@
         </div>
         <div class="about-block">
           <h3 class="sub-label mono" data-i18n="about.next">下一步</h3>
-          <ul class="next-list"><li data-i18n="next.1">找富士用户做实拍验证：同一配方，改参数前后对比</li><li data-i18n="next.2">读取照片 EXIF 里的模拟和白平衡设置，自动体检</li><li data-i18n="next.3">补充 Classic Neg.、Nostalgic Neg. 等模拟的预览</li></ul>
+          <ul class="next-list"><li data-i18n="next.1">找富士用户做实拍验证：同一配方，改参数前后对比</li><li data-i18n="next.2">读取照片 EXIF 里的模拟和白平衡设置，自动体检</li><li data-i18n="next.3">用真实机身直出照片校准自制的示意 LUT</li></ul>
         </div>
       </div>
     </div>
@@ -232,7 +234,7 @@
 
 <footer class="foot">
   <div class="wrap">
-    <p data-i18n="foot.credits">预览使用开源 G'MIC 胶片模拟合集中的 LUT，是近似效果，与机身直出会有差异。示例照片来自 scikit-image（公有领域 / CC0）。富士、FUJIFILM 及各胶片模拟名称是富士胶片的商标，本项目与其无关联。</p>
+    <p data-i18n="foot.credits">预览使用开源 G'MIC 胶片模拟合集中的 LUT，以及我按各模拟公认特点自制的示意 LUT，都是近似效果，与机身直出会有差异。示例照片来自 scikit-image（公有领域 / CC0）。富士、FUJIFILM 及各胶片模拟名称是富士胶片的商标，本项目与其无关联。</p>
     <p class="by"><span data-i18n="foot.by">设计与开发：</span><a href="https://github.com/YunruiLin99">Yunrui Lin</a></p>
   </div>
 </footer>

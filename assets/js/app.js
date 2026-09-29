@@ -1,6 +1,6 @@
 import { loadLUT, applyLUT, toCanvas, cropToImageData } from "./lut.js";
 import { measure } from "./analyze.js";
-import { LIGHTS, lightOf, guessLight, SIMS, simOf, rankSims, extraSims } from "./sims.js";
+import { LIGHTS, lightOf, guessLight, SIMS, simOf, rankSims, NEWER_ONLY } from "./sims.js";
 import { checkRecipe, DEFAULT_RECIPE } from "./checks.js";
 import { STRINGS } from "./i18n.js";
 
@@ -206,20 +206,26 @@ async function renderCards() {
     origCv.className = "orig";
     shot.prepend(filmCv, origCv);
     shot.setAttribute("aria-label", `${sim.name} — ${t("card.hold")}`);
-    $(".shot-tag", card).textContent = sim.approx ? t("card.approx") : "LUT";
+    const tagText = t(`card.${sim.preview}`);
+    $(".shot-tag", card).textContent = tagText;
     $(".shot-hint", card).textContent = t("card.hold");
     $(".rank", card).textContent = `${t("card.pick")} ${String(i + 1).padStart(2, "0")}`;
     $(".score", card).textContent = fit;
     $(".fname", card).textContent = sim.name;
     $(".reason b", card).remove();
     $(".reason span", card).textContent = sim[state.lang] + L("。", ".");
-    bindCompare(shot, sim.approx ? t("card.approx") : "LUT");
+    if (NEWER_ONLY.includes(sim.id)) {
+      const n = document.createElement("p");
+      n.className = "newer mono";
+      n.textContent = t("card.newer");
+      $(".card-body", card).append(n);
+    }
+    bindCompare(shot, tagText);
     cards.append(card);
   });
-  const extra = extraSims(state.lightKey);
-  const ex = $("#extra");
-  ex.classList.toggle("hidden", !extra.length);
-  if (extra.length) ex.textContent = `${t("extra.pre")} ${extra.map((s) => s.name).join(" / ")}${t("extra.post")}`;
+  const hasSelf = ranked.some(({ sim }) => sim.preview !== "gmic");
+  $("#extra").classList.toggle("hidden", !hasSelf);
+  $("#extra").textContent = t("preview.note");
 }
 
 function bindCompare(shot, tagText) {
@@ -241,6 +247,12 @@ function buildForm() {
   const tone = (v) => `<option value="${v}">${v > 0 ? "+" : ""}${v}</option>`;
   $("#f-hl").innerHTML = TONES.map(tone).join("");
   $("#f-sh").innerHTML = TONES.map(tone).join("");
+  const shift = (v) => `<option value="${v}">${v > 0 ? "+" : ""}${v}</option>`;
+  const SH = Array.from({ length: 19 }, (_, i) => i - 9);
+  $("#f-wbr").innerHTML = SH.map(shift).join("");
+  $("#f-wbb").innerHTML = SH.map(shift).join("");
+  $("#f-wbr").value = "0";
+  $("#f-wbb").value = "0";
   $("#f-hl").value = "0";
   $("#f-sh").value = "0";
   $("#f-wb").value = "auto";
@@ -259,6 +271,8 @@ function readRecipe() {
     highlight: Number($("#f-hl").value),
     shadow: Number($("#f-sh").value),
     iso: $("#f-iso").value,
+    wbR: Number($("#f-wbr").value),
+    wbB: Number($("#f-wbb").value),
   };
 }
 function fillRecipe(r) {
@@ -269,6 +283,8 @@ function fillRecipe(r) {
   $("#f-hl").value = String(r.highlight);
   $("#f-sh").value = String(r.shadow);
   $("#f-iso").value = r.iso;
+  $("#f-wbr").value = String(r.wbR ?? 0);
+  $("#f-wbb").value = String(r.wbB ?? 0);
   syncKelvin();
 }
 

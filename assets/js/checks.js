@@ -8,7 +8,7 @@ export const WB_PRESETS = { daylight: 5500, shade: 7500, incandescent: 3000 };
 // X-Trans IV / V 的基础感光度是 ISO 160：DR200 ≥ 320，DR400 ≥ 640；更早的机型基础 ISO 200，对应 400 / 800
 const DR_MIN_ISO = { 200: 320, 400: 640 };
 
-export const DEFAULT_RECIPE = { sim: "classic_chrome", wb: "kelvin", kelvin: 5200, dr: "400", highlight: -1, shadow: 1, iso: "auto6400" };
+export const DEFAULT_RECIPE = { sim: "classic_chrome", wb: "kelvin", kelvin: 5200, wbR: 2, wbB: -4, dr: "400", highlight: -1, shadow: 1, iso: "auto6400" };
 
 export function checkRecipe(recipe, lightKey, reading, lang = "zh") {
   const L = (zh, en) => (lang === "zh" ? zh : en);
@@ -45,6 +45,20 @@ export function checkRecipe(recipe, lightKey, reading, lang = "zh") {
           `The author set this for their own light. You're in ${lightName} (about ${light.k}K), roughly ${Math.abs(diff)}K apart.${golden ? " If you want a strong warm mood, this may be exactly what you're after." : ""}`),
         L(`改成 AUTO 白平衡（保留配方的 R/B 偏移），或者把 K 值改成约 ${Math.round(light.k / 100) * 100}K。`, `Switch to AUTO WB (keep the recipe's R/B shift), or set about ${Math.round(light.k / 100) * 100}K.`));
     }
+  }
+
+  // 1b. 白平衡偏移：暖色偏移叠加暖光、冷色偏移叠加冷光
+  const R = Number(recipe.wbR || 0), B = Number(recipe.wbB || 0);
+  const warmLight = lightKey === "golden" || lightKey === "indoor_warm" || lightKey === "night";
+  const coolLight = lightKey === "overcast" || lightKey === "shade";
+  if (R - B >= 4 && warmLight) {
+    add("warn", L(`白平衡偏移 R${R >= 0 ? "+" : ""}${R} / B${B >= 0 ? "+" : ""}${B} 会和暖光叠加`, `WB shift R${R >= 0 ? "+" : ""}${R} / B${B >= 0 ? "+" : ""}${B} stacks with the warm light`),
+      L(`这个偏移本身就是往暖色调，${lightName}本来也偏暖，两者叠加后照片会更黄更橙。`, `The shift already pushes warm, and ${lightName} is warm too — together the photo turns more yellow-orange.`),
+      L(`把 R/B 偏移减半，比如 R${Math.round(R / 2) >= 0 ? "+" : ""}${Math.round(R / 2)} / B${Math.round(B / 2) >= 0 ? "+" : ""}${Math.round(B / 2)}。`, `Halve the shift, e.g. R${Math.round(R / 2) >= 0 ? "+" : ""}${Math.round(R / 2)} / B${Math.round(B / 2) >= 0 ? "+" : ""}${Math.round(B / 2)}.`));
+  } else if (B - R >= 4 && coolLight) {
+    add("warn", L(`白平衡偏移 R${R >= 0 ? "+" : ""}${R} / B${B >= 0 ? "+" : ""}${B} 会和冷光叠加`, `WB shift R${R >= 0 ? "+" : ""}${R} / B${B >= 0 ? "+" : ""}${B} stacks with the cool light`),
+      L(`这个偏移往冷色调，${lightName}本来也偏冷，照片会明显发蓝。`, `The shift pushes cool, and ${lightName} is cool too — photos will look noticeably blue.`),
+      L("把 B 往回调 2–3 格，或给 R 加一点。", "Pull B back 2–3 steps, or add a little R."));
   }
 
   // 2. 动态范围与 ISO
@@ -109,9 +123,9 @@ export function checkRecipe(recipe, lightKey, reading, lang = "zh") {
       L(`在这种光线下，${sim.name} ${sim.poorWhy.zh}。`, `In this light, ${sim.name} ${sim.poorWhy.en}.`),
       L(`可以试试 ${alt.name}：${alt.zh}。`, `Try ${alt.name}: ${alt.en.toLowerCase()}.`));
   } else if (sim.good.includes(lightKey)) {
-    add("ok", L(`${sim.name} 很适合${lightName}`, `${sim.name} suits ${lightName}`), sim[lang]);
+    add("ok", L(`${sim.name} 很适合${lightName}`, `${sim.name} suits ${lightName}`), sim[lang] + L("。", "."));
   } else {
-    add("ok", L(`${sim.name} 在${lightName}下可以用`, `${sim.name} works in ${lightName}`), sim[lang]);
+    add("ok", L(`${sim.name} 在${lightName}下可以用`, `${sim.name} works in ${lightName}`), sim[lang] + L("。", "."));
   }
 
   const order = { high: 0, warn: 1, ok: 2 };
